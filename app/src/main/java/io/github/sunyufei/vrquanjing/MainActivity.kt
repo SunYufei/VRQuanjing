@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
@@ -12,6 +13,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var webView: WebView
+    private var backPressed: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +45,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         when (webView.canGoBack()) {
-            true -> webView.goBack()
-            false -> super.onBackPressed()
+            true -> {
+                webView.goBack()
+                backPressed = false
+            }
+            false -> {
+                when (backPressed) {
+                    true -> super.onBackPressed()
+                    false -> {
+                        backPressed = true
+                        Toast.makeText(this@MainActivity, "再按一下退出", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
 }
