@@ -2,14 +2,13 @@ package io.github.sunyufei.vrquanjing
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.webkit.WebView
 import android.webkit.WebViewClient
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        private val URL: String = "file:///android_asset/index.html"
+        private const val URL: String = "file:///android_asset/index.html"
     }
 
     private lateinit var webView: WebView
@@ -21,6 +20,18 @@ class MainActivity : AppCompatActivity() {
         supportActionBar!!.hide()
 
         webView = findViewById(R.id.webView)
+
+        val settings = webView.settings
+        settings.allowFileAccess = true
+        settings.allowUniversalAccessFromFileURLs = true
+        settings.defaultTextEncodingName = "UTF-8"
+        settings.domStorageEnabled = true
+        settings.javaScriptEnabled = true
+        settings.javaScriptCanOpenWindowsAutomatically = true
+        settings.loadWithOverviewMode = true
+        settings.loadsImagesAutomatically = true
+        settings.useWideViewPort = true
+
         webView.loadUrl(URL)
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
@@ -28,25 +39,12 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         }
-
-        var settings = webView.settings
-        settings.javaScriptEnabled = true
-        settings.useWideViewPort = true
-        settings.loadWithOverviewMode = true
-        settings.allowFileAccess = true
-        settings.javaScriptCanOpenWindowsAutomatically = true
-        settings.loadsImagesAutomatically = true
-        settings.defaultTextEncodingName = "UTF-8"
-        settings.domStorageEnabled = true
-        settings.allowUniversalAccessFromFileURLs = true
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-        if (keyCode == KeyEvent.KEYCODE_BACK && webView.canGoBack()) {
-            webView.goBack()
-            return true
-        } else
-            return super.onKeyDown(keyCode, event)
-
+    override fun onBackPressed() {
+        when (webView.canGoBack()) {
+            true -> webView.goBack()
+            false -> super.onBackPressed()
+        }
     }
 }
