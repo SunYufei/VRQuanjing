@@ -12,9 +12,9 @@ import android.webkit.WebView
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import android.widget.ImageView
+import android.widget.Toast
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
-import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                     true -> super.onBackPressed()
                     false -> {
                         backPressed = true
-                        toast("再按一下退出")
+                        Toast.makeText(this@MainActivity, "再按一下退出", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
