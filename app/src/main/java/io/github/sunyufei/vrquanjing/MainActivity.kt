@@ -8,13 +8,14 @@ import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.util.DisplayMetrics
 import android.view.WindowManager
-import android.webkit.WebSettings
 import android.webkit.WebView
+import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.Toast
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private lateinit var webView: WebView
+
     private var backPressed: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,17 +36,18 @@ class MainActivity : AppCompatActivity() {
 
         webView = findViewById(R.id.webView)
 
-        val settings = webView.settings
-        settings.allowFileAccess = true
-        settings.allowUniversalAccessFromFileURLs = true
-        settings.cacheMode = WebSettings.LOAD_DEFAULT
-        settings.defaultTextEncodingName = "UTF-8"
-        settings.domStorageEnabled = true
-        settings.javaScriptEnabled = true
-        settings.javaScriptCanOpenWindowsAutomatically = true
-        settings.loadWithOverviewMode = true
-        settings.loadsImagesAutomatically = true
-        settings.useWideViewPort = true
+        webView.settings.run {
+            allowFileAccess = true
+            allowUniversalAccessFromFileURLs = true
+            cacheMode = WebSettings.LOAD_DEFAULT
+            defaultTextEncodingName = "UTF-8"
+            domStorageEnabled = true
+            javaScriptEnabled = true
+            javaScriptCanOpenWindowsAutomatically = true
+            loadWithOverviewMode = true
+            loadsImagesAutomatically = true
+            useWideViewPort = true
+        }
 
         webView.loadUrl(URL)
         webView.webViewClient = object : WebViewClient() {
@@ -122,9 +125,11 @@ class MainActivity : AppCompatActivity() {
         imageView.setImageBitmap(bitmap)
 
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setTitle("分享")
-        builder.setView(imageView)
-        builder.setPositiveButton("关闭", null)
-        builder.show()
+        builder.run {
+            setTitle("分享")
+            setView(imageView)
+            setPositiveButton("关闭", null)
+            show()
+        }
     }
 }
