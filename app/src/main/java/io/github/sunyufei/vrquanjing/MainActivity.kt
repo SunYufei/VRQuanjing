@@ -12,9 +12,9 @@ import android.webkit.WebView
 import android.webkit.WebSettings
 import android.webkit.WebViewClient
 import android.widget.ImageView
-import android.widget.Toast
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.qrcode.QRCodeWriter
+import org.jetbrains.anko.toast
 
 
 class MainActivity : AppCompatActivity() {
@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         private const val BASE_URL: String = "https://sunovo.gitee.io/quanjing/"
     }
 
-    private lateinit var webView: WebView
-
     private var backPressed: Boolean = false
+
+    private lateinit var webView: WebView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,47 +36,52 @@ class MainActivity : AppCompatActivity() {
 
         webView = findViewById(R.id.webView)
 
-        webView.settings.run {
-            allowFileAccess = true
-            allowUniversalAccessFromFileURLs = true
-            cacheMode = WebSettings.LOAD_DEFAULT
-            defaultTextEncodingName = "UTF-8"
-            domStorageEnabled = true
-            javaScriptEnabled = true
-            javaScriptCanOpenWindowsAutomatically = true
-            loadWithOverviewMode = true
-            loadsImagesAutomatically = true
-            useWideViewPort = true
-        }
+        webView.run {
 
-        webView.loadUrl(URL)
-        webView.webViewClient = object : WebViewClient() {
-            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                webView.loadUrl(url)
-                return true
+            settings.run {
+                allowFileAccess = true
+                allowUniversalAccessFromFileURLs = true
+                cacheMode = WebSettings.LOAD_DEFAULT
+                defaultTextEncodingName = "UTF-8"
+                domStorageEnabled = true
+                javaScriptEnabled = true
+                javaScriptCanOpenWindowsAutomatically = true
+                loadWithOverviewMode = true
+                loadsImagesAutomatically = true
+                useWideViewPort = true
             }
 
-            override fun onPageFinished(view: WebView?, url: String?) {
+            loadUrl(URL)
+
+            webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                    loadUrl(url)
+                    return true
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    when (url == URL) {
+                        true -> this@MainActivity.window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                        false -> this@MainActivity.window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    }
+                    super.onPageFinished(view, url)
+                }
+            }
+
+            setOnLongClickListener {
                 when (url == URL) {
-                    true -> this@MainActivity.window.clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
-                    false -> this@MainActivity.window.addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN)
+                    false -> {
+                        val localUrl: String = url
+                        val index = localUrl.indexOf("file:///android_asset/") + "file:///android_asset/".length
+                        val newUrl = BASE_URL + localUrl.substring(index)
+                        showQRCode(newUrl)
+                    }
                 }
-                super.onPageFinished(view, url)
+                true
             }
-        }
-
-        webView.setOnLongClickListener {
-            when (webView.url == URL) {
-                false -> {
-                    val localUrl: String = webView.url
-                    val index = localUrl.indexOf("file:///android_asset/") + "file:///android_asset/".length
-                    val newUrl = BASE_URL + localUrl.substring(index)
-                    showQRCode(newUrl)
-                }
-            }
-            true
         }
     }
+
 
     override fun onBackPressed() {
         when (webView.canGoBack()) {
@@ -89,7 +94,7 @@ class MainActivity : AppCompatActivity() {
                     true -> super.onBackPressed()
                     false -> {
                         backPressed = true
-                        Toast.makeText(this@MainActivity, "再按一下退出", Toast.LENGTH_SHORT).show()
+                        toast("再按一下退出")
                     }
                 }
             }
