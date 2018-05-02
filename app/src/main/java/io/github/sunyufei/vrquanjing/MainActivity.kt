@@ -89,18 +89,15 @@ class MainActivity : AppCompatActivity() {
                 webView.goBack()
                 backPressed = false
             }
-            false -> {
-                when (backPressed) {
-                    true -> super.onBackPressed()
-                    false -> {
-                        backPressed = true
-                        Toast.makeText(this@MainActivity, "再按一下退出", Toast.LENGTH_SHORT).show()
-                    }
+            false -> when (backPressed) {
+                true -> super.onBackPressed()
+                false -> {
+                    backPressed = true
+                    Toast.makeText(this@MainActivity, "再按一下退出", Toast.LENGTH_SHORT).show()
                 }
             }
         }
     }
-
 
     private fun showQRCode(url: String?) {
         val imageView = ImageView(this@MainActivity)

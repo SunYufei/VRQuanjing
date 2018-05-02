@@ -10,8 +10,8 @@ android {
         applicationId "io.github.sunyufei.vrquanjing"
         minSdkVersion 19
         targetSdkVersion 27
-        versionCode 180429
-        versionName "1.7.6"
+        versionCode 180502
+        versionName "1.7.7"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
