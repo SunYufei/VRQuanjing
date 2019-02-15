@@ -1,7 +1,7 @@
 # VRQuanjing
 
+> 此项目不再更新
+
 ### Download Link
 
-[China](https://gitee.com/sunovo/VRQuanjing/raw/master/app/release/VRQuanjing_latest.apk)
-
-[International](https://github.com/SunYufei/VRQuanjing/raw/master/app/release/VRQuanjing_latest.apk)
+[Github](https://github.com/SunYufei/VRQuanjing/raw/master/app/release/VRQuanjing_latest.apk)
